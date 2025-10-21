@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
-const connectDB = require('./db_con.js'); // goes up from src/ to root
-const contactRoutes = require('./router.js'); // goes up from src/ to root
+const connectDB = require('./db_con.js'); // MongoDB connection
+const router = require('./router.js'); // Contact routes
 
 const app = express();
 
@@ -10,15 +11,27 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors({
-  origin: ['http://localhost:3000', 'https://your-frontend.vercel.app'], // allow frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use('/api/contact', contactRoutes);
+// API routes
+app.use('/api/contact', router);
 
+// Serve frontend if in production
+if (process.env.NODE_ENV === 'production') {
+  const buildPath = path.join(__dirname, 'client', 'build');
+  app.use(express.static(buildPath));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(buildPath, 'index.html'));
+  });
+}
+
+// Root route for testing backend
+app.get('/', (req, res) => {
+  res.send('Backend is running!');
+});
+
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
