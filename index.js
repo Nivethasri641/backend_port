@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const connectDB = require('./db_con.js'); // goes up from src/ to root
-const contactRoutes = require('./contactroute.js'); // goes up from src/ to root
+const contactRoutes = require('./router.js'); // goes up from src/ to root
 
 const app = express();
 
