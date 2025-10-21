@@ -1,8 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const connectDB = require('../db_con.js');
-const contactRoutes = require('../router/contactroute.js');
+const connectDB = require('../db_con.js'); // goes up from src/ to root
+const contactRoutes = require('../router/contactroute.js'); // goes up from src/ to root
 
 const app = express();
 
@@ -10,7 +10,11 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://your-frontend.vercel.app'], // allow frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Routes
