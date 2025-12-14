@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
-const connectDB = require('./db_con.js'); // MongoDB connection
-const router = require('./router.js'); // Contact routes
+const connectDB = require('./db_con'); // MongoDB connection
+const router = require('./router'); // Contact routes
 
 const app = express();
 
