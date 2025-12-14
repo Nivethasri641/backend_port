@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 require('dotenv').config();
 const connectDB = require('./db_con'); // MongoDB connection
 const router = require('./router'); // Contact routes
@@ -11,21 +10,14 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'https://port-front-kappa.vercel.app', // your Vercel frontend URL
+  methods: ['GET', 'POST']
+}));
 app.use(express.json());
 
 // API routes
 app.use('/api/contact', router);
-
-// Serve frontend if in production
-if (process.env.NODE_ENV === 'production') {
-  const buildPath = path.join(__dirname, 'client', 'build');
-  app.use(express.static(buildPath));
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(buildPath, 'index.html'));
-  });
-}
 
 // Root route for testing backend
 app.get('/', (req, res) => {
